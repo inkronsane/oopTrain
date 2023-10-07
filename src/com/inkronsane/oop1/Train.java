@@ -55,11 +55,22 @@ public class Train {
     int availableCoupeSeats = getCoupeSeats() - reservedCoupeSeats;
     int availablePlatzkartSeats = getPlatzkartSeats() - reservedPlatzkartSeats;
 
-    if (numCoupeSeats <= availableCoupeSeats && numPlatzkartSeats <= availablePlatzkartSeats) {
+    boolean availableSeats = true;
+
+    if (numCoupeSeats > availableCoupeSeats) {
+      System.out.println("Недостатньо купейних місць для бронювання.");
+      availableSeats = false;
+    }
+
+    if (numPlatzkartSeats > availablePlatzkartSeats) {
+      System.out.println("Недостатньо плацкартних місць для бронювання.");
+      availableSeats = false;
+    }
+
+    if (availableSeats) {
       reservedCoupeSeats += numCoupeSeats;
       reservedPlatzkartSeats += numPlatzkartSeats;
-    } else {
-      System.out.println("Недостатньо місць для бронювання.");
+      System.out.println("Ваші місця успішно заброньовано!");
     }
   }
 
@@ -70,7 +81,6 @@ public class Train {
   public int getAvailablePlatzkartSeats() {
     return platzkartSeats - reservedPlatzkartSeats;
   }
-
   @Override
   public String toString() {
     return "Потяг номер " + trainNumber + " відправляється до міста " + destination + ", о " + departureTime;
