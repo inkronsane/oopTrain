@@ -51,29 +51,18 @@ public class Train {
     return reservedPlatzkartSeats;
   }
 
-  public void reserveSeats(int numCoupeSeats, int numPlatzkartSeats) {
+  public boolean reserveSeats(int numCoupeSeats, int numPlatzkartSeats) {
     int availableCoupeSeats = getCoupeSeats() - reservedCoupeSeats;
     int availablePlatzkartSeats = getPlatzkartSeats() - reservedPlatzkartSeats;
 
-    boolean availableSeats = true;
-
-    if (numCoupeSeats > availableCoupeSeats) {
-      System.out.println("Недостатньо купейних місць для бронювання.");
-      availableSeats = false;
-    }
-
-    if (numPlatzkartSeats > availablePlatzkartSeats) {
-      System.out.println("Недостатньо плацкартних місць для бронювання.");
-      availableSeats = false;
-    }
-
-    if (availableSeats) {
+    if (numCoupeSeats <= availableCoupeSeats && numPlatzkartSeats <= availablePlatzkartSeats) {
       reservedCoupeSeats += numCoupeSeats;
       reservedPlatzkartSeats += numPlatzkartSeats;
-      System.out.println("Ваші місця успішно заброньовано!");
+      return true;
+    } else {
+      return false;
     }
   }
-
   public int getAvailableCoupeSeats() {
     return coupeSeats - reservedCoupeSeats;
   }

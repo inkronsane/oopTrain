@@ -8,7 +8,7 @@ public class Logic {
 
   public Logic() {
     trains = new ArrayList<>();
-    trains.add(new Train("Ужгород", 101, "08:00", 200, 110, 20));
+    trains.add(new Train("Ужгород", 101, "08:00", 200, 110, 29));
     trains.add(new Train("Львів", 102, "09:30", 220, 45, 20));
     trains.add(new Train("Одеса", 103, "10:45", 320, 55, 20));
     trains.add(new Train("Амстердам", 104, "12:15", 290, 47, 20));
@@ -27,7 +27,7 @@ public class Logic {
       System.out.println("Меню:");
       System.out.println("1. Список поїздів до пункту призначення");
       System.out.println("2. Список поїздів до пункту призначення після певного часу");
-      System.out.println("3. Список поїздів до пункту призначення з доступними загальними місцями");
+      System.out.println("3. Список поїздів до пункту призначення з вільними місцями");
       System.out.println("4. Купити білет на потяг");
       System.out.println("0. Вийти");
       System.out.print("Виберіть опцію: ");
@@ -53,12 +53,12 @@ public class Logic {
           List<Train> trainsWithAvailableSeats = getTrainsWithAvailableSeats(destination3);
 
           if (!trainsWithAvailableSeats.isEmpty()) {
-            System.out.println("Список поїздів до " + destination3 + " з доступними загальними місцями:");
+            System.out.println("Список поїздів до " + destination3 + " з вільними місцями:");
             for (Train train : trainsWithAvailableSeats) {
               System.out.println(train);
             }
           } else {
-            System.out.println("На жаль, немає потягів до " + destination3 + " з доступними загальними місцями.");
+            System.out.println("На жаль, немає потягів до " + destination3 + " з вільними місцями.");
           }
           break;
 
@@ -115,7 +115,9 @@ public class Logic {
     List<Train> trainsToDestination = new ArrayList<>();
 
     for (Train train : trains) {
-      if (train.getDestination().equalsIgnoreCase(destination) && train.getAvailablePlatzkartSeats() > 0) {
+      if (train.getDestination().equalsIgnoreCase(destination) && (train.getAvailablePlatzkartSeats() > 0 || train.getAvailableCoupeSeats() > 0)) {
+        System.out.println("Доступно плацкартних місць: " + train.getAvailablePlatzkartSeats());
+        System.out.println("Доступно купейних місць: " + train.getAvailableCoupeSeats());
         trainsToDestination.add(train);
       }
     }
@@ -123,14 +125,21 @@ public class Logic {
     return trainsToDestination;
   }
 
-  public boolean bookSeats(int trainNumber, int numCoupeSeats, int numPlatzkartSeats) {
+  public void bookSeats(int trainNumber, int numCoupeSeats, int numPlatzkartSeats) {
     Train trainToBook = findTrainByNumber(trainNumber);
     if (trainToBook == null) {
       System.out.println("Потяг з номером " + trainNumber + " не знайдений.");
-      return false;
+      return;
     }
-    trainToBook.reserveSeats(numCoupeSeats, numPlatzkartSeats);
-    return true;
+
+    boolean bookingResult = trainToBook.reserveSeats(numCoupeSeats, numPlatzkartSeats);
+
+    if (bookingResult) {
+      System.out.println("Місця успішно заброньовані!");
+    } else {
+      System.out.println("Недостатньо місць для бронювання.");
+    }
+
   }
 
   private Train findTrainByNumber(int trainNumber) {
