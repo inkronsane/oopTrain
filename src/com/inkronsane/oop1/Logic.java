@@ -69,11 +69,7 @@ public class Logic {
           int numCoupeSeatsToBook = scanner.nextInt();
           System.out.print("Введіть кількість броньованих плацкартних місць: ");
           int numPlatzkartSeatsToBook = scanner.nextInt();
-
-          boolean bookingResult = bookSeats(trainNumberToBook, numCoupeSeatsToBook, numPlatzkartSeatsToBook);
-
-          String bookingMessage = bookingResult ? "Місця успішно заброньовані!" : "Помилка під час бронювання місць.";
-          System.out.println(bookingMessage);
+          bookSeats(trainNumberToBook, numCoupeSeatsToBook, numPlatzkartSeatsToBook);
           break;
         case 0:
           break;
